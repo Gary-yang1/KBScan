@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from . import models
 from scanner.tools import StrToList
+from scanner.tools import CheckKB
 
 
 # Create your views here.
@@ -19,7 +20,7 @@ def result(request):
     if request.method == 'POST':
         KBNum_str = request.POST['KBNum']
         Str_list = StrToList.toList(KBNum_str)  # 获取漏洞编号，存在list中
-
-        return HttpResponse(request.body)
+        reslist = CheckKB.check(Str_list)
+        return HttpResponse("缺少的补丁有：" + str(reslist))
     else:
         return HttpResponse('error')
